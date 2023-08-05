@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% for finch in finches %}
+    <div class="card mt-2">
+      <div class="card-body">
+        <div class="card-title h3">{{ finch.name }}</div>
+        <div class="card-subtitle text-muted">
+          <p>
+            {% if finch.age > 0 %}
+              {{ finch.age }}&nbsp;years old
+            {% else %}
+              Chick
+            {% endif %}
+          </p>
+        </div>
+        <p class="card-text">
+          <strong>Breed:</strong> {{ finch.breed }} <br />
+          <strong>Description:</strong> {{ finch.description }}
+        </p>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
