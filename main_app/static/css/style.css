@@ -24,10 +24,6 @@
     transform: translateY(50%);
 }
 
-.text-description{
-    text-decoration: underline dashed;
-}
-
 .btn-light-blue{
     background-color: var(--lighter-blue) !important;
     box-shadow: 0 0.1rem 0.3rem rgba(0,0,0,.175)!important;
