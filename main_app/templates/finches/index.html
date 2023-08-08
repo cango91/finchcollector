@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
   {% for finch in finches %}
-    <div class="card mt-2">
-      <div class="card-body">
+  <a class="link-dark nav-link" href="{% url 'finches:detail' finch.id %}">
+    <div class="card mt-2 shadow-sm">
+      <div class="card-body hover-effect">
         <div class="card-title h3">{{ finch.name }}</div>
         <div class="card-subtitle text-muted">
           <p>
             {% if finch.age > 0 %}
-              {{ finch.age }}&nbsp;years old
+              {{ finch.age }}&nbsp;year{{ finch.age|pluralize }} old
             {% else %}
               Chick
             {% endif %}
@@ -19,5 +20,6 @@
         </p>
       </div>
     </div>
+  </a>
   {% endfor %}
 {% endblock %}

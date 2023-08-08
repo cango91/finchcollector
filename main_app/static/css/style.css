@@ -1,3 +1,29 @@
+:root{
+    --light-blue: #e3f2fd;
+    --lighter-blue: #f2f7fc;
+    --hover-fx-transition-duration: ease-in-out 0.15s;
+}
+
 .bg-light-blue{
-    background-color: #e3f2fd !important;
+    background-color: var(--light-blue);
+}
+
+.hover-effect:hover{
+    background-color: var(--lighter-blue);
+    box-shadow: inset;
+    transition: all var(--hover-fx-transition-duration)
+}
+
+.hover-effect{
+    background-color: inherit;
+    box-shadow: none;
+    transition: all var(--hover-fx-transition-duration)
+}
+
+.translate-y-50{
+    transform: translateY(50%);
+}
+
+.text-description{
+    text-decoration: underline dashed;
 }

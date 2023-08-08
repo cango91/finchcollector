@@ -17,21 +17,23 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
+            {% url 'finches:about' as c_url %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'main:about' %}">About</a>
+              <a class="nav-link {% if request.path == c_url %}active{% endif %}" href="{{ c_url }}">About</a>
             </li>
+            {% url 'finches:index' as c_url %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'main:index' %}">View All My Finches</a>
+              <a class="nav-link {% if request.path == c_url %}active{% endif %}" href="{{ c_url }}">View All My Finches</a>
             </li>
           </ul>
         </div>
       </div>
     </header>
-    <main class="container mt-5 mt-lg-6 pt-2">
+    <main class="container mt-5 mb-5 mt-lg-6 pt-2 pb-2 position-relative">
       {% block content %}
       {% endblock %}
     </main>
-    <footer class="d-flex justify-content-between py-4 my-4 border-top fixed-bottom bg-light-blue">
+    <footer class="d-flex justify-content-between py-1 border-top fixed-bottom bg-light-blue">
       <div class="ms-auto">All Rights Reserved, &copy; 2023 Finch Collector &nbsp;</div>
     </footer>
   </body>

@@ -1,19 +1,24 @@
-from django.shortcuts import render
-
-finches = [
-  {'name': 'Lolo', 'breed': 'House Finch', 'description': 'lovely voice', 'age': 3},
-  {'name': 'Sachi', 'breed': 'Red Crosbill', 'description': 'gentle and loving', 'age': 2},
-  {'name': 'Tweety', 'breed': 'American Goldfinch', 'description': '... what will I be? Will I be pretty?', 'age': 0},
-]
+from django.shortcuts import render, get_list_or_404, get_object_or_404
+from .models import Finch
 
 # Create your views here.
+
+
 def home(request):
-    return render(request,'home.html')
+    return render(request, 'home.html')
+
 
 def about(req):
     return render(req, 'about.html')
 
+
 def index(req):
-    return render(req,'finches/index.html',{
+    finches = get_list_or_404(Finch)
+    return render(req, 'finches/index.html', {
         'finches': finches,
     })
+
+
+def detail(req, id):
+    finch = get_object_or_404(Finch, id=id)
+    return render(req, 'finches/detail.html', {"finch": finch})
