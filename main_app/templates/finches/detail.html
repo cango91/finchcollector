@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <a class="btn btn-primary rounded-pill translate-y-50 text-dark bg-light-blue btn-light-blue" href="{% url 'finches:index' %}">&larr; Back to All Finches</a>
+<div class="text-center h1"><span class="text-success">{{ finch.name }}</span> Details</div>
   <div class="card container shadow-lg translate-y-50">
     <div class="card-body">
       <div class="card-title h3">{{ finch.name }}</div>
@@ -17,6 +18,10 @@
         <strong>Breed:</strong> {{ finch.breed }} <br />
         <strong>Description:</strong> {{ finch.description|linebreaks }}
       </p>
+      <div class="card-footer">
+        <a href="{% url 'finches:update' finch.id %}" class="btn btn-warning">Edit</a>
+        <a href="{% url 'finches:delete' finch.id %}" class="btn btn-danger">Delete</a>
+      </div>
     </div>
   </div>
 {% endblock %}
