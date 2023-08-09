@@ -1,36 +1,70 @@
-:root{
+:root {
     --light-blue: #e3f2fd;
     --lighter-blue: #f2f7fc;
     --hover-fx-transition-duration: ease-in-out 0.15s;
 }
 
-.bg-light-blue{
+.bg-light-blue {
     background-color: var(--light-blue);
 }
 
-.hover-effect:hover{
+.hover-effect:hover {
     background-color: var(--lighter-blue);
     box-shadow: inset;
     transition: all var(--hover-fx-transition-duration)
 }
 
-.hover-effect{
+.hover-effect {
     background-color: inherit;
     box-shadow: none;
     transition: all var(--hover-fx-transition-duration)
 }
 
-.translate-y-50{
+.translate-y-50 {
     transform: translateY(50%);
 }
 
-.btn-light-blue{
+.translate-y-25 {
+    transform: translateY(25%);
+}
+
+.btn-light-blue {
     background-color: var(--lighter-blue) !important;
-    box-shadow: 0 0.1rem 0.3rem rgba(0,0,0,.175)!important;
+    box-shadow: 0 0.1rem 0.3rem rgba(0, 0, 0, .175) !important;
 
 }
 
-.btn-light-blue:hover{
+.btn-light-blue:hover {
     background-color: var(--light-blue) !important;
-    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,.175)!important;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .175) !important;
+}
+
+.navbar-brand .img-fluid {
+    width: 40px;
+    margin-right: 1rem;
+}
+
+.mt-6 {
+    margin-top: 4.5rem !important;
+}
+
+@media (max-width: 299.98px) {
+    .mt-xs-7 {
+        margin-top: 6rem !important;
+    }
+}
+
+.fa {
+    display: inline-block;
+    font-size: 1rem;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.fa.fa-calendar{
+    background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>');
+    width: 16px;
+    height: 16px;
+
 }

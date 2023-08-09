@@ -1,27 +1,123 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% block head %}
+  <!-- Popperjs -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+          crossorigin="anonymous"></script>
+  <!-- Tempus Dominus JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.11/dist/js/tempus-dominus.min.js"
+          crossorigin="anonymous"></script>
+  <!-- Tempus Dominus Styles -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.11/dist/css/tempus-dominus.min.css"
+        crossorigin="anonymous">
+{% endblock head %}
 {% block content %}
-<a class="btn btn-primary rounded-pill translate-y-50 text-dark bg-light-blue btn-light-blue" href="{% url 'finches:index' %}">&larr; Back to All Finches</a>
-<div class="text-center h1"><span class="text-success">{{ finch.name }}</span> Details</div>
-  <div class="card container shadow-lg translate-y-50">
-    <div class="card-body">
-      <div class="card-title h3">{{ finch.name }}</div>
-      <div class="card-subtitle text-muted">
-        <p>
-          {% if finch.age > 0 %}
-            {{ finch.age }}&nbsp;year{{ finch.age|pluralize }} old
-          {% else %}
-            Chick
-          {% endif %}
-        </p>
+  <a class="btn btn-primary rounded-pill translate-y-50 text-dark bg-light-blue btn-light-blue"
+     href="{% url 'finches:index' %}">← Back to All Finches</a>
+  <div class="row translate-y-50">
+    <div class="text-center h1">
+      <span class="text-success">{{ finch.name }}</span> Details
+    </div>
+  </div>
+  <div class="row translate-y-25">
+    <div class="col-sm-6">
+      <div class="card shadow ">
+        <div class="card-body">
+          <div class="card-title h3">{{ finch.name }}</div>
+          <div class="card-subtitle text-muted">
+            <p>
+              {% if finch.age > 0 %}
+                {{ finch.age }}&nbsp;year
+                {{ finch.age|pluralize }} old
+              {% else %}
+                Chick
+              {% endif %}
+            </p>
+          </div>
+          <p class="card-text">
+            <strong>Breed:</strong>
+            {{ finch.breed }}
+            <br />
+            <strong>Description:</strong>
+            {{ finch.description|linebreaks }}
+          </p>
+        </div>
+        <div class="card-footer">
+          <a href="{% url 'finches:update' finch.id %}" class="btn btn-warning">Edit</a>
+          <a href="{% url 'finches:delete' finch.id %}" class="btn btn-danger">Delete</a>
+        </div>
       </div>
-      <p class="card-text">
-        <strong>Breed:</strong> {{ finch.breed }} <br />
-        <strong>Description:</strong> {{ finch.description|linebreaks }}
-      </p>
-      <div class="card-footer">
-        <a href="{% url 'finches:update' finch.id %}" class="btn btn-warning">Edit</a>
-        <a href="{% url 'finches:delete' finch.id %}" class="btn btn-danger">Delete</a>
+    </div>
+    <div class="col-sm-6 mb-5">
+      <table class="table table-stripeds shadow-sm">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Meal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for feeding in finch.feeding_set.all %}
+            <tr>
+              <td>{{ feeding.date }}</td>
+              <td>{{ feeding.get_meal_display }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="row">
+        <form class="d-flex flex-column col-sm-6" method="post" action="{% url 'finches:add_feeding' finch.id %}">
+          {% csrf_token %}
+          <!-- Render the inputs -->
+          {% for field in feeding_form %}
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {% if field.name == "date" %}
+                <div class="input-group date"
+                     id="{{ field.auto_id }}"
+                     data-target-input="nearest">
+                  {{ field }}
+                  <div class="input-group-append"
+                       data-target="#{{ field.auto_id }}"
+                       data-toggle="datetimepicker"></div>
+                  <div class="input-group-text">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+              {% else %}
+                {{ field }}
+              {% endif %}
+            </div>
+          {% endfor %}
+          <input type="submit" class="btn btn-secondary mt-2" value="Add Feeding">
+        </form>
+        <div class="col-sm-6 d-flex align-items-center justify-content-center">
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              {% if finch.is_full %}
+                <span class="text-success">Finch is fed enough for the day.</span>
+              {% else %}
+                <span class="text-danger">Finch may be hungry!</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-{% endblock %}
+  <script>
+    const dateEl = document.querySelector('.date');
+    const picker = new tempusDominus.TempusDominus(dateEl,{
+      display:{
+        components:{
+          clock:false,
+        },
+      },
+      localization:{
+        format: 'yyyy-MM-dd'
+      },
+      defaultDate: new Date(),
+      useCurrent: true,
+    });
+  </script>
+{% endblock content %}
