@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load toy_extras %}
+{% block content %}
+    <a class="btn btn-primary rounded-pill translate-y-50 text-dark bg-light-blue btn-light-blue"
+       href="{% url 'finches:toys' %}">← Back to All Toys</a>
+    <div class="row translate-y-50">
+        <div class="card  col-lg-6 offset-lg-3">
+            <div class="card-body">
+                <div class="card-title">
+                    <div class="text-center h1">
+                        <span style="color: {{ toy.color }};">{{ toy.name }}</span> Details
+                    </div>
+                </div>
+                <p class="card-text">
+                    <strong>Name:</strong> {{ toy.name }}
+                </p>
+                <p class="card-text">
+                    <strong>Color:</strong> {{ toy.color|fix_color_name }}
+                </p>
+            </div>
+            <div class="card-footer row">
+                <div>
+                    <a href="{% url 'finches:update_toy' toy.id %}" class="btn btn-outline-secondary">Edit</a>
+                    <a href="{% url 'finches:delete_toy' toy.id %}" class="btn btn-outline-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

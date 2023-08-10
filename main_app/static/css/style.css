@@ -20,13 +20,13 @@
     transition: all var(--hover-fx-transition-duration)
 }
 
-.translate-y-50 {
+/* .translate-y-50 {
     transform: translateY(50%);
 }
 
 .translate-y-25 {
     transform: translateY(25%);
-}
+} */
 
 .btn-light-blue {
     background-color: var(--lighter-blue) !important;
@@ -40,7 +40,7 @@
 }
 
 .navbar-brand .img-fluid {
-    width: 40px;
+    width: 45px;
     margin-right: 1rem;
 }
 
@@ -48,9 +48,37 @@
     margin-top: 4.5rem !important;
 }
 
+.mb-6 {
+    margin-bottom: 4.5rem !important;
+}
+
+.mt-7 {
+    margin-top: 6rem !important;
+}
+
+.mt-8 {
+    margin-top: 9rem !important;
+
+}
+
 @media (max-width: 299.98px) {
     .mt-xs-7 {
         margin-top: 6rem !important;
+    }
+    .mt-xs-8{
+        margin-top: 9rem !important;
+    }
+    .mt-xs-9{
+        margin-top: 12rem !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .mt-sm-7 {
+        margin-top: 6rem !important;
+    }
+    .mt-sm-8{
+        margin-top: 9rem !important;
     }
 }
 
@@ -67,4 +95,10 @@
     width: 16px;
     height: 16px;
 
+}
+
+.photo-card{
+    width: 24rem !important;
+    align-self: center;
+    justify-self: center;
 }

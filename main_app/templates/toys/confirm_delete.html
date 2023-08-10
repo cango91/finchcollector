@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container d-flex justify-content-center">
+    <div class="card shadow-sm mt-5">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="card-title h3">
+            Confirm Deletion of <span class="text-danger">{{ toy.name }}</span>
+        </div>
+        You are about to delete
+        {{ toy.name }} permanently. Are you sure you want to continue?
+      </div>
+      <div class="card-footer">
+        <form action="" method="post" class="d-inline">
+          {% csrf_token %}
+          <input type="submit" class="btn btn-danger" value="Yes, Delete">
+        </form>
+        <a href="{% url 'finches:toy_details' toy.id %}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -19,7 +19,9 @@ def create_bootstrap_form(**kwargs) -> forms.ModelForm:
             model = kwargs['model']
             fields = kwargs['fields']
 
-        # Add `form-control` class to all fields' widgets without explicitly doing it for each field.
+        # Add `form-control` class to all fields' widgets
+        # Unless field type is date or select. Then add appropriate classes
+        # Hopefully we won't be using radios or checkboxes for the next part of lab or this poor simple factory will have to keep on growing >.<
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)

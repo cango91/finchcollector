@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load toy_extras %}
 {% block head %}
   <!-- Popperjs -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
@@ -12,96 +13,238 @@
         crossorigin="anonymous">
 {% endblock head %}
 {% block content %}
-  <a class="btn btn-primary rounded-pill translate-y-50 text-dark bg-light-blue btn-light-blue"
-     href="{% url 'finches:index' %}">← Back to All Finches</a>
-  <div class="row translate-y-50">
-    <div class="text-center h1">
-      <span class="text-success">{{ finch.name }}</span> Details
-    </div>
-  </div>
-  <div class="row translate-y-25">
-    <div class="col-sm-6">
-      <div class="card shadow ">
-        <div class="card-body">
-          <div class="card-title h3">{{ finch.name }}</div>
-          <div class="card-subtitle text-muted">
-            <p>
-              {% if finch.age > 0 %}
-                {{ finch.age }}&nbsp;year
-                {{ finch.age|pluralize }} old
-              {% else %}
-                Chick
-              {% endif %}
-            </p>
-          </div>
-          <p class="card-text">
-            <strong>Breed:</strong>
-            {{ finch.breed }}
-            <br />
-            <strong>Description:</strong>
-            {{ finch.description|linebreaks }}
-          </p>
-        </div>
-        <div class="card-footer">
-          <a href="{% url 'finches:update' finch.id %}" class="btn btn-warning">Edit</a>
-          <a href="{% url 'finches:delete' finch.id %}" class="btn btn-danger">Delete</a>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4">
+        <a class="btn btn-primary rounded-pill mt-5 text-dark bg-light-blue btn-light-blue"
+           href="{% url 'finches:index' %}">← Back to All Finches</a>
+      </div>
+      <div class="col-sm-8 mt-5 mb-5">
+        <div class="d-inline text-center h1">
+          <span class="text-success">{{ finch.name }}</span> Details
         </div>
       </div>
     </div>
-    <div class="col-sm-6 mb-5">
-      <table class="table table-stripeds shadow-sm">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Meal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for feeding in finch.feeding_set.all %}
-            <tr>
-              <td>{{ feeding.date }}</td>
-              <td>{{ feeding.get_meal_display }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <div class="row">
-        <form class="d-flex flex-column col-sm-6" method="post" action="{% url 'finches:add_feeding' finch.id %}">
-          {% csrf_token %}
-          <!-- Render the inputs -->
-          {% for field in feeding_form %}
-            <div class="form-group">
-              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-              {% if field.name == "date" %}
-                <div class="input-group date"
-                     id="{{ field.auto_id }}"
-                     data-target-input="nearest">
-                  {{ field }}
-                  <div class="input-group-append"
-                       data-target="#{{ field.auto_id }}"
-                       data-toggle="datetimepicker"></div>
-                  <div class="input-group-text">
-                    <i class="fa fa-calendar"></i>
-                  </div>
-                </div>
-              {% else %}
-                {{ field }}
-              {% endif %}
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="card-title h3">{{ finch.name }}</div>
+            <div class="card-subtitle text-muted">
+              <p>
+                {% if finch.age > 0 %}
+                  {{ finch.age }}&nbsp;year
+                  {{ finch.age|pluralize }} old
+                {% else %}
+                  Chick
+                {% endif %}
+              </p>
             </div>
-          {% endfor %}
-          <input type="submit" class="btn btn-secondary mt-2" value="Add Feeding">
-        </form>
-        <div class="col-sm-6 d-flex align-items-center justify-content-center">
-          <div class="card shadow-sm">
-            <div class="card-body text-center">
-              {% if finch.is_full %}
-                <span class="text-success">Finch is fed enough for the day.</span>
-              {% else %}
-                <span class="text-danger">Finch may be hungry!</span>
-              {% endif %}
+            <p class="card-text">
+              <strong>Breed:</strong>
+              {{ finch.breed }}
+              <br />
+              <strong>Description:</strong>
+              {{ finch.description|linebreaks }}
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'finches:update' finch.id %}"
+               class="btn btn-outline-secondary btn-sm">Edit</a>
+            <a href="{% url 'finches:delete' finch.id %}"
+               class="btn btn-outline-danger btn-sm">Delete</a>
+          </div>
+        </div>
+        <!-- Photo Section-->
+        {% if finch.photo_set.all.count == 1 %}
+          <div class="d-flex justify-content-center mt-1 mb-1">
+            <div class="card shadow-sm photo-card">
+              <img src="{{ finch.photo_set.first.url }}"
+                   height=""
+                   width=""
+                   alt="photo of {{ finch.name }}"
+                   class="card-img-top shadow-sm">
+            </div>
+          </div>
+        {% elif finch.photo_set.count > 1 %}
+          <div class="d-flex justify-content-center mt-1 mb-1">
+            <div class="card shadow-sm photo-card">
+              <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                  {% for photo in finch.photo_set.all %}
+                    <button type="button"
+                            data-bs-target="#carousel"
+                            data-bs-slide-to="{{ forloop.counter|add:-1 }}"
+                            {% if forloop.counter == 1 %}class="active"{% endif %}></button>
+                  {% endfor %}
+                </div>
+                <div class="carousel-inner">
+                  {% for photo in finch.photo_set.all %}
+                    <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                      <img src="{{ photo.url }}"
+                           height=""
+                           width=""
+                           alt="Photo {{ forloop.counter }} of {{ finch.name }}"
+                           class="card-img-top">
+                    </div>
+                  {% endfor %}
+                </div>
+                <button class="carousel-control-prev"
+                        type="button"
+                        data-bs-target="#carousel"
+                        data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next"
+                        type="button"
+                        data-bs-target="#carousel"
+                        data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <div class="card mt-2 shadow-sm">
+            <div class="card-body">
+              <p class="card-text text-center text-muted">No photos uploaded</p>
+            </div>
+          </div>
+        {% endif %}
+        <div class="container mb-5">
+          <form action="{% url 'finches:add_photo' finch.id %}"
+                enctype="multipart/form-data"
+                method="post"
+                class="card mt-2 shadow-sm mb-5">
+            {% csrf_token %}
+            <input class="form-control" type="file" name="photo-file" accept="image/*">
+            <div>
+              <button type="submit" class="btn btn-outline-primary btn-sm m-1 float-end">Upload Photo</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Feeding Section-->
+      <div class="col-sm-6">
+        <div class="container">
+          <div class="row">
+            <form class="d-flex flex-column col-sm-6"
+                  method="post"
+                  action="{% url 'finches:add_feeding' finch.id %}">
+              {% csrf_token %}
+              <!-- Render the inputs -->
+              {% for field in feeding_form %}
+                <div class="form-group">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {% if field.name == "date" %}
+                    <div class="input-group date"
+                         id="{{ field.auto_id }}_group"
+                         data-target-input="nearest">
+                      {{ field }}
+                      <div class="input-group-append"
+                           data-target="#{{ field.auto_id }}"
+                           data-toggle="datetimepicker"></div>
+                      <div class="input-group-text">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                    </div>
+                  {% else %}
+                    {{ field }}
+                  {% endif %}
+                </div>
+              {% endfor %}
+              <input type="submit" class="btn btn-success mt-2" value="Add Feeding">
+            </form>
+            <div class="col-sm-6 d-flex align-items-center justify-content-center">
+              <div class="card shadow-sm mb-2">
+                <div class="card-body text-center">
+                  {% if finch.is_full %}
+                    <span class="text-success">{{ finch.name }} had enough food for the day.</span>
+                  {% else %}
+                    <span class="text-danger">{{ finch.name }} may be hungry!</span>
+                  {% endif %}
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <div id="feedings-section"></div>
+        <table class="table table-striped shadow-sm mt-2" id="feedings-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Meal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- this comment exists so my awesome (no sarcasm, i do love it) linter will shut up about empty tbody tags :) -->
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2">
+                <div class="d-flex justify-content-around">
+                  <button class="btn btn-sm btn-outline-primary" id="prev-link">← Previous</button>
+                  <span id="page-info"></span>
+                  <button class="btn btn-sm btn-outline-primary" id="next-link">Next →</button>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <!-- Toys Section -->
+    <div class="row mt-sm-8 mt-xs-9 mb-5" id="toys-section">
+      <hr>
+      <div class="col-sm-6 mb-5">
+        <h3>{{ finch.name }}'s Toys</h3>
+        {% if finch.toys.count %}
+          {% for toy in finch.toys.all %}
+            <div class="card mt-2 mb-1 shadow-sm">
+              <div class="card-body">
+                <div class="card-title">
+                  A <span style="color: {{ toy.color }}">{{ toy.color|fix_color_name }}</span> {{ toy.name }}
+                </div>
+              </div>
+              <div class="card-footer">
+                <form action="{% url 'finches:disassociate_toy' finch.id toy.id %}"
+                      class="d-inline"
+                      method="post">
+                  {% csrf_token %}
+                  <input class="btn btn-danger btn-sm" type="submit" value="Take Toy">
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <h5>Poor birb... has no toys 😢</h5>
+        {% endif %}
+      </div>
+      <div class="col-sm-6 mb-5">
+        <h3>Available Toys</h3>
+        {% for toy in available_toys %}
+          <div class="card mt-2 mb-1 shadow-sm">
+            <div class="card-body">
+              <div class="card-title">
+                A <span style="color: {{ toy.color }}">{{ toy.color|fix_color_name }}</span> {{ toy.name }}
+              </div>
+            </div>
+            <div class="card-footer">
+              <form action="{% url 'finches:associate_toy' finch.id toy.id %}"
+                    class="d-inline"
+                    method="post">
+                {% csrf_token %}
+                <input class="btn btn-success btn-sm" type="submit" value="Give Toy">
+              </form>
+            </div>
+          </div>
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -119,5 +262,89 @@
       defaultDate: new Date(),
       useCurrent: true,
     });
+
+    // If feedings are too numerous, the table extends behind my <hr> and toys cards
+    // solution: pagination
+    const tableEl = document.getElementById('feedings-table');
+    const all_feedings = [];
+    // ugly part of solution: this clutters the client-side with a bunch of pushes. Alternative would be to provide the feeding_set.all as a list from the view.
+    {% for feeding in finch.feeding_set.all %}
+      all_feedings.push({date: "{{ feeding.date }}", meal: "{{ feeding.get_meal_display }}" });
+    {% endfor %}
+
+    const PER_PAGE = {% if finch.photo_set.all.count %} 14 {% else %} 5 {% endif %};
+    let page = 1;
+    let maxPage =1;
+    if(all_feedings.length>PER_PAGE){
+      maxPage = Math.ceil(all_feedings.length/PER_PAGE);
+    }
+    const pages = new Array(maxPage);
+    for (let i = 0; i < maxPage; i++) {
+      pages[i] = all_feedings.slice(i * PER_PAGE, (i + 1) * PER_PAGE);
+    }
+
+    const renderPagination = () =>{
+      const prevLink = document.getElementById('prev-link');
+      const nextLink = document.getElementById('next-link');
+      const pageInfo = document.getElementById('page-info');
+
+      if(maxPage>1){
+        // show pagination controls if data won't fit in one page
+        // Apply the .invisible class conditionally
+        if (page === 1) {
+          prevLink.classList.add('invisible');
+        } else {
+          prevLink.classList.remove('invisible');
+        }
+
+        if (page === maxPage) {
+          nextLink.classList.add('invisible');
+        } else {
+          nextLink.classList.remove('invisible');
+        }
+
+        pageInfo.textContent = `page ${page} of ${maxPage}`;
+      }else if(all_feedings.length){
+        // hide the footer and next/prev links if data fits in one page
+        nextLink.textContent='';
+        prevLink.textContent='';
+        tableEl.querySelector('tfoot').classList.add('d-none');
+      }else{
+        // since we're doing client side js now, might as well hide the table if no feeding data
+        tableEl.classList.add('d-none');
+      }
+    }
+
+    const renderTable = () =>{
+      const tableBody = tableEl.querySelector('tbody');
+      // so as not to clutter the DOM
+      while(tableBody.firstChild){
+        tableBody.firstChild.remove();
+      }
+      tableBody.innerHTML = '';
+    
+      const currentPageData = pages[page - 1];
+    
+      currentPageData.forEach(feeding => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${feeding.date}</td><td>${feeding.meal}</td>`;
+        tableBody.appendChild(row);
+      });
+    
+      renderPagination();
+    }
+
+    document.getElementById('prev-link').addEventListener('click', () => {
+      page--;
+      renderTable();
+    });
+    document.getElementById('next-link').addEventListener('click', () => {
+      page++;
+      renderTable();
+    });
+    
+    // Call renderTable to initially render the first page
+    renderTable();
+
   </script>
 {% endblock content %}

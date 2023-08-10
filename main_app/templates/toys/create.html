@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container d-flex justify-content-center">
+    <div class="card shadow-sm mt-5">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="card-title">
+            {% if object %}
+              <h1>
+                Edit <span style="color: {{ object.color }};">{{ object.name }}</span>
+              </h1>
+            {% else %}
+              <h1>Add Toy</h1>
+            {% endif %}
+          </div>
+          <form action="" method="post" class="mb-5">
+            {% csrf_token %}
+            <table>
+              {{ form.as_table }}
+            </table>
+            <div class="float-start">
+              <input class="btn btn-success mt-2 mb-2" type="submit" value="Submit" />
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted"><strong>Note:</strong> If the color is a valid HTML color name, try writing it without spaces in CamelCase
+            <br>(i.e. try writing BurlyWood instead of Burly Wood)</small>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

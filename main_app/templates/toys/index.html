@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load toy_extras %}
+{% block content %}
+<div class="text-center h1 mt-2">Toy List</div>
+  {% for toy in toy_list %}
+  <a class="link-dark nav-link" href="{% url 'finches:toy_details' toy.id %}">
+    <div class="card mt-2 shadow-sm">
+      <div class="card-body hover-effect">
+        <div class="card-title h3"><span style="color:{{ toy.color }};">{{ toy.name }}</span></div>
+        <p class="card-text">
+          <strong>Name:</strong> {{ toy.name }} <br />
+          <strong>Color:</strong> <span style="color:{{ toy.color }};">{{ toy.color|fix_color_name }}</span>
+        </p>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+{% endblock content %}

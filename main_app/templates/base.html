@@ -16,9 +16,9 @@
     <!-- Our CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <!-- Whereas chromium based browsers seem to handle 'graceful degradation' ordering of icons as expected, Safari and FF seem to prefer x-icon (*.ico) as long as it's present, or the first one they can render when it's not present. So alas with a little repetition, we are able to render the transparent bg circular logo on all major browsers in this way -->
-    <link rel="icon" href="{% static 'images/logo32.png' %}" type="image/png">
-    <link rel="icon" href="{% static 'images/logo32.webp' %}" type="image/webp">
-    <link rel="icon" href="{% static 'images/logo32.png' %}" type="image/png">
+    <link rel="icon" href="{% static 'images/favicon32.png' %}" type="image/png">
+    <link rel="icon" href="{% static 'images/favicon32.webp' %}" type="image/webp">
+    <link rel="icon" href="{% static 'images/favicon32.png' %}" type="image/png">
     {% block head %}{% endblock head %}
     <title>Finch Collector</title>
   </head>
@@ -28,9 +28,9 @@
         <a class="navbar-brand px-2 h1" href="{% url 'finches:home' %}">
           <img class="img-fluid"
                alt="brand logo"
-               width=""
                height=""
-               src="{% static 'images/logo256.svg' %} ">
+               width=""
+               src="{% static 'images/color_logo256.svg' %} ">
         Finch Collector</a>
         <button class="navbar-toggler"
                 type="button"
@@ -48,6 +48,16 @@
               <a class="nav-link {% if request.path == c_url %}active{% endif %}"
                  href="{{ c_url }}">About</a>
             </li>
+            {% url 'finches:create_toy' as c_url %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == c_url %}active{% endif %}"
+                 href="{{ c_url }}">Add a Toy</a>
+            </li>
+            {% url 'finches:toys' as c_url %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == c_url %}active{% endif %}"
+                 href="{{ c_url }}">View All Toys</a>
+            </li>
             {% url 'finches:create' as c_url %}
             <li class="nav-item">
               <a class="nav-link {% if request.path == c_url %}active{% endif %}"
@@ -56,7 +66,7 @@
             {% url 'finches:index' as c_url %}
             <li class="nav-item">
               <a class="nav-link {% if request.path == c_url %}active{% endif %}"
-                 href="{{ c_url }}">View All My Finches</a>
+                 href="{{ c_url }}">View All Finches</a>
             </li>
           </ul>
         </div>
