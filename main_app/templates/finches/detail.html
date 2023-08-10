@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% load toy_extras %}
 {% block head %}
-  <!-- Popperjs -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-          crossorigin="anonymous"></script>
   <!-- Tempus Dominus JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.11/dist/js/tempus-dominus.min.js"
           crossorigin="anonymous"></script>
@@ -57,7 +54,8 @@
                class="btn btn-outline-danger btn-sm">Delete</a>
           </div>
         </div>
-        <!-- Photo Section-->
+        <!-- Photo Section -->
+        <!-- If single photo exists, show it. If multiple photos exist show a carousel. -->
         {% if finch.photo_set.all.count == 1 %}
           <div class="d-flex justify-content-center mt-1 mb-1">
             <div class="card shadow-sm photo-card">
@@ -263,7 +261,7 @@
       useCurrent: true,
     });
 
-    // If feedings are too numerous, the table extends behind my <hr> and toys cards
+    // problem: None
     // solution: pagination
     const tableEl = document.getElementById('feedings-table');
     const all_feedings = [];
